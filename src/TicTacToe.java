@@ -74,22 +74,38 @@ public class TicTacToe {
         field[y][x] = DOT_AI;
     }
 
-    // checkWin
+    /** Проверка победы реализована путем перебора всех игровых ячеек. Считаем сумму совпадений размещенных
+     * на игровом поле отметок от каждой ячейки по горизонтали (вправо), вертикали (вниз) и 2-м диагоналям (вправо вверх
+     * и вправо вниз) с учетом границ игрового поля.
+     *
+     * @param c отметка проверяемого игрока
+     * @return если победа возращаем истина, иначе - ложь
+     */
     private static boolean checkWin(char c) {
-        // hor
-        if (field[0][0] == c && field[0][1] == c && field[0][2] == c) return true;
-        if (field[1][0] == c && field[1][1] == c && field[1][2] == c) return true;
-        if (field[2][0] == c && field[2][1] == c && field[2][2] == c) return true;
 
-        // ver
-        if (field[0][0] == c && field[1][0] == c && field[2][0] == c) return true;
-        if (field[0][1] == c && field[1][1] == c && field[2][1] == c) return true;
-        if (field[0][2] == c && field[1][2] == c && field[2][2] == c) return true;
-
-        // dia
-        if (field[0][0] == c && field[1][1] == c && field[2][2] == c) return true;
-        if (field[0][2] == c && field[1][1] == c && field[2][0] == c) return true;
+        // Перебор всех ячеек игрового поля
+        for (int y = 0; y < field.length; y++) {
+            for (int x = 0; x < field[y].length; x++) {
+                //Проверка по горизонтали вправо (в условии выполняем проверку границы)
+                if (field[y].length - x > 2) {
+                    if (field[y][x] == c && field[y][x+1] == c && field[y][x+2] == c) return true;
+                }
+                //Проверка по вертикали вниз (в условии выполняем проверку границы)
+                if (field.length - y > 2) {
+                    if (field[y][x] == c && field[y+1][x] == c && field[y+2][x] == c) return true;
+                }
+                //Проверка 1 диагонали вправо вверх (в условии выполняем проверку границ)
+                if (y  > 1 && field[y].length - x > 2){
+                    if (field[y][x] == c && field[y-1][x+1] == c && field[y-2][x+2] == c) return true;
+                }
+                //Проверка 2 диагонали вправо вниз (в условии выполняем проверку границ)
+                if (field.length - y > 2 && field[y].length - x > 2) {
+                    if (field[y][x] == c && field[y+1][x+1] == c && field[y+2][x+2] == c) return true;
+                }
+            }
+        }
         return false;
+
     }
 
     //checkDraw
@@ -115,7 +131,7 @@ public class TicTacToe {
                 if (gameChecks(DOT_AI, "Computer win")) break;
             }
             System.out.println("Play again?");
-            if (!SCANNER.next().equals("Y"))
+            if (!SCANNER.next().equals("Y".toLowerCase()))
                 break;
         }
     }
